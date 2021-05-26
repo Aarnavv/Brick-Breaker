@@ -1,214 +1,259 @@
-const Engine = Matter.Engine;
-const World = Matter.World;
-const Bodies = Matter.Bodies;
-const Constraint = Matter.Constraint;
-const Render = Matter.Render;
+var brickRowOne = 23;
+var brickRowTwo = 21;
+var brickRowThree = 19;
+var brickRowFour = 17;
+var brickRowFive = 15;
+var brickRowSix = 13;
+var brickRowSeven = 11;
+var brickRowEight = 9;
+var brickRowNine = 7;
+var brickRowTen = 5;
+var brickRowEleven = 3;
+var brickRowTwelve = 1;
+// var bricksArray = [];
+var bricksGroup;
 
-
-
-var engine, world;
-var brickRowOneArray = [];
-var brickRowOne = 20;
-
-var brickRowTwoArray = [];
-var brickRowTwo = 18;
-
-var brickRowThreeArray = [];
-var brickRowThree = 16;
-
-var brickRowFourArray = [];
-var brickRowFour = 14;
-
-var brickRowFiveArray = [];
-var brickRowFive = 12;
-
-var brickRowSixArray = [];
-var brickRowSix = 10;
-
-var brickRowSevenArray = [];
-var brickRowSeven = 8;
-
-var brickRowEightArray = [];
-var brickRowEight = 6;
-
-var brickRowNineArray = [];
-var brickRowNine = 4;
-
-var brickRowTenArray = [];
-var brickRowTen = 2;
-
-var brickRowElevenArray = [];
-var brickRowEleven = 0;
+var brickImage1;
+var brickImage2;
+var brickImage3;
+var brickImage4;
+var brickImage5;
 
 var bgImg;
-var i;
 
-var paddle;
+var paddle, paddleImg;
 var ball, ballImg;
+
+var imgs = [];
+var imageToUse;
 
 function preload() {
   bgImg = loadImage("images/bg2.jpeg")
-  ballImg = loadImage("images/ball.png");
-
+  ballImg = loadImage("images/ball.png")
+  brickImage1 = loadImage("images/blue.jpeg")
+  brickImage2 = loadImage("images/green.jpeg")
+  brickImage3 = loadImage("images/orange.jpeg")
+  brickImage4 = loadImage("images/red.jpeg")
+  brickImage5 = loadImage("images/yellow.jpeg")
+  paddleImg = loadImage("images/paddle.png")
 }
 
 function setup() {
-  createCanvas(1400, 800);
-  engine = Engine.create();
-  world = engine.world;
-  var render = Render.create({
-    element: document.body,
-    engine: engine,
-    options: {
-      width: 1400,
-      height: 800,
-      wireframes: false
-    }
-  });
-  Render.run(render);
+  createCanvas(1325, 700);
 
-  var xRowOne = 100;
-  var yRowOne = 200;
-  for(i = 0; i <= brickRowOne; i++){
-    brickRowOneArray.push(new Bricks(xRowOne, yRowOne))
-    xRowOne += 61;
+  imgs = [brickImage1, brickImage2, brickImage3, brickImage4, brickImage5]
+
+  imageToUse = random(imgs);
+
+  bricksGroup = createGroup();
+
+  var xRowOne = 90;
+  var yRowOne = 100;
+  for (i = 1; i <= brickRowOne; i++) {
+    brick = createSprite(xRowOne, yRowOne, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowOne += 51;
   }
 
 
-  var xRowTwo = 161;
-  var yRowTwo = 221;
-  for(i = 0; i <= brickRowTwo; i++){
-    brickRowTwoArray.push(new Bricks(xRowTwo, yRowTwo))
-    xRowTwo += 61;
+  var xRowTwo = 141;
+  var yRowTwo = 125;
+  for (i = 1; i <= brickRowTwo; i++) {
+    brick = createSprite(xRowTwo, yRowTwo, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowTwo += 51;
   }
 
-  var xRowThree = 222;
-  var yRowThree = 242;
-  for(i = 0; i <= brickRowThree; i++){
-    brickRowThreeArray.push(new Bricks(xRowThree, yRowThree))
-    xRowThree += 61;
+  var xRowThree = 192;
+  var yRowThree = 150;
+  for (i = 1; i <= brickRowThree; i++) {
+    brick = createSprite(xRowThree, yRowThree, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowThree += 51;
   }
 
-  var xRowFour = 283;
-  var yRowFour = 263;
-  for(i = 0; i <= brickRowFour; i++){
-    brickRowFourArray.push(new Bricks(xRowFour, yRowFour))
-    xRowFour += 61;
+  var xRowFour = 243;
+  var yRowFour = 175;
+  for (i = 1; i <= brickRowFour; i++) {
+    brick = createSprite(xRowFour, yRowFour, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowFour += 51;
   }
 
-  var xRowFive = 343;
-  var yRowFive = 284;
-  for(i = 0; i <= brickRowFive; i++){
-    brickRowFiveArray.push(new Bricks(xRowFive, yRowFive))
-    xRowFive += 61;
+  var xRowFive = 293;
+  var yRowFive = 200;
+  for (i = 1; i <= brickRowFive; i++) {
+    brick = createSprite(xRowFive, yRowFive, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowFive += 51;
   }
 
-  var xRowSix = 404;
-  var yRowSix = 305;
-  for(i = 0; i <= brickRowSix; i++){
-    brickRowSixArray.push(new Bricks(xRowSix, yRowSix))
-    xRowSix += 61;
+  var xRowSix = 344;
+  var yRowSix = 225;
+  for (i = 1; i <= brickRowSix; i++) {
+    brick = createSprite(xRowSix, yRowSix, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowSix += 51;
   }
 
-  var xRowSeven = 465;
-  var yRowSeven = 326;
-  for(i = 0; i <= brickRowSeven; i++){
-    brickRowSevenArray.push(new Bricks(xRowSeven, yRowSeven))
-    xRowSeven += 61;
+  var xRowSeven = 395;
+  var yRowSeven = 250;
+  for (i = 1; i <= brickRowSeven; i++) {
+    brick = createSprite(xRowSeven, yRowSeven, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowSeven += 51;
   }
 
-  var xRowEight = 526;
-  var yRowEight = 347;
-  for(i = 0; i <= brickRowEight; i++){
-    brickRowEightArray.push(new Bricks(xRowEight, yRowEight))
-    xRowEight += 61;
+  var xRowEight = 446;
+  var yRowEight = 275;
+  for (i = 1; i <= brickRowEight; i++) {
+    brick = createSprite(xRowEight, yRowEight, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowEight += 51;
   }
 
-  var xRowNine = 587;
-  var yRowNine = 368;
-  for(i = 0; i <= brickRowNine; i++){
-    brickRowNineArray.push(new Bricks(xRowNine, yRowNine))
-    xRowNine += 61;
+  var xRowNine = 497;
+  var yRowNine = 300;
+  for (i = 1; i <= brickRowNine; i++) {
+    brick = createSprite(xRowNine, yRowNine, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowNine += 51;
   }
 
-  var xRowTen = 648;
-  var yRowTen = 389;
-  for(i = 0; i <= brickRowTen; i++){
-    brickRowTenArray.push(new Bricks(xRowTen, yRowTen))
-    xRowTen += 61;
+  var xRowTen = 548;
+  var yRowTen = 325;
+  for (i = 1; i <= brickRowTen; i++) {
+    brick = createSprite(xRowTen, yRowTen, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowTen += 51;
   }
 
-  var xRowEleven = 709;
-  var yRowEleven = 410;
-  for(i = 0; i <= brickRowEleven; i++){
-    brickRowElevenArray.push(new Bricks(xRowEleven, yRowEleven))
-    xRowEleven += 61;
+  var xRowEleven = 599;
+  var yRowEleven = 350;
+  for (i = 1; i <= brickRowEleven; i++) {
+    brick = createSprite(xRowEleven, yRowEleven, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowEleven += 51;
   }
 
-  paddle = new Paddle();
-  ball = new Ball();
+  var xRowTwelve = 650;
+  var yRowTwelve = 375;
+  for (i = 1; i <= brickRowTwelve; i++) {
+    brick = createSprite(xRowTwelve, yRowTwelve, 50, 20)
+    imageToUse = random(imgs);
+    brick.addImage(imageToUse)
+    brick.scale = 1;
+    bricksGroup.add(brick);
+    // bricksArray.push(brick);
+    xRowTwelve += 51;
+  }
+
+  paddle = createSprite(650, 600, 200, 25);
+  paddle.addImage(paddleImg);
+  paddle.setCollider("rectangle", 0, 0, 230, 35);
+  // paddle.debug = true;
+  
+  ball = createSprite(650, 550, 20, 20);
+  ball.addImage(ballImg);
+  ball.scale = 0.02;
+  ball.velocityX = -5;
+  ball.velocityY = -5;
 }
 
 function draw() {
-  background("blue")
+  background(bgImg)
+
+  var edges = createEdgeSprites()
+  ball.bounceOff(edges[2])
+  ball.bounceOff(edges[0])
+  ball.bounceOff(edges[1])
+  ball.bounceOff(paddle)
+
+  ball.bounceOff(bricksGroup, deleteBrick)
+
+  // ball.bounceOff(bricksGroup)
+
+  // for(var i = bricksArray.length - 1; i >= 0; i++){
+  //   const brick = bricksArray[i]
+  //   if(ball.collide(brick)){
+  //     bricksArray.splice(i, 1)  
+  //   }
+  //   else{
+  //     bricksArray.display()
+  //   }
+  // }
+    
+
+  if(ball.isTouching(edges[3])){
+    ball.velocityX = 0;
+    ball.velocityY = 0;
+  }
+
   
-  Engine.update(engine); 
- 
-
-  for(i = 0; i <= brickRowOne; i++){
-    brickRowOneArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowTwo; i++){
-    brickRowTwoArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowThree; i++){
-    brickRowThreeArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowFour; i++){
-    brickRowFourArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowFive; i++){
-    brickRowFiveArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowSix; i++){
-    brickRowSixArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowSeven; i++){
-    brickRowSevenArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowEight; i++){
-    brickRowEightArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowNine; i++){
-    brickRowNineArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowTen; i++){
-    brickRowTenArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowEleven; i++){
-    brickRowElevenArray[i].display();
-  }
-
-  paddle.display();
-  paddle.paddle.position.y = 600;
-  ball.display();
-  image(ballImg, ball.body.position.x, ball.body.position.y, 40, 40);
-
-
   drawSprites();
 }
 
-// function keyPressed(){
-//   paddle.move();
-// }
+function keyPressed() {
+  if (paddle.x >= 5 && paddle.x <= 1300) {
+    if (keyCode == RIGHT_ARROW) {
+      paddle.x += 20;
+    }
+    if (keyCode == LEFT_ARROW) {
+      paddle.x -= 20;
+    }
+  }
+  else if (paddle.x < 5) {
+    paddle.x = 10
+  }
+  else if (paddle.x > 1300) {
+    paddle.x = 1275
+  }
+}
 
+function deleteBrick(ball, brick){
+  brick.remove();
+}
