@@ -10,8 +10,8 @@ var brickRowNine = 7;
 var brickRowTen = 5;
 var brickRowEleven = 3;
 var brickRowTwelve = 1;
-// var bricksArray = [];
-var bricksGroup;
+var bricksArray = [];
+// var bricksGroup;
 
 var brickImage1;
 var brickImage2;
@@ -54,8 +54,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowOne += 51;
   }
 
@@ -67,8 +67,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowTwo += 51;
   }
 
@@ -79,8 +79,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowThree += 51;
   }
 
@@ -91,8 +91,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowFour += 51;
   }
 
@@ -103,8 +103,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowFive += 51;
   }
 
@@ -115,8 +115,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowSix += 51;
   }
 
@@ -127,8 +127,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowSeven += 51;
   }
 
@@ -139,8 +139,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowEight += 51;
   }
 
@@ -151,8 +151,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowNine += 51;
   }
 
@@ -163,8 +163,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowTen += 51;
   }
 
@@ -175,8 +175,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowEleven += 51;
   }
 
@@ -187,8 +187,8 @@ function setup() {
     imageToUse = random(imgs);
     brick.addImage(imageToUse)
     brick.scale = 1;
-    bricksGroup.add(brick);
-    // bricksArray.push(brick);
+    // bricksGroup.add(brick);
+    bricksArray.push(brick);
     xRowTwelve += 51;
   }
 
@@ -213,19 +213,21 @@ function draw() {
   ball.bounceOff(edges[1])
   ball.bounceOff(paddle)
 
-  ball.bounceOff(bricksGroup, deleteBrick)
-
+  // if(ball.collide(bricksGroup)){
+    // bricksGroup.forEach()
+    // brick.destroy()
+  // }
   // ball.bounceOff(bricksGroup)
 
-  // for(var i = bricksArray.length - 1; i >= 0; i++){
-  //   const brick = bricksArray[i]
-  //   if(ball.collide(brick)){
-  //     bricksArray.splice(i, 1)  
-  //   }
-  //   else{
-  //     bricksArray.display()
-  //   }
-  // }
+  for(var i = bricksArray.length - 1; i >= 0; i++){
+    const brick = bricksArray[i]
+    if(ball.collide(brick)){
+      bricksArray.splice(i, 1)  
+    }
+    else{
+      bricksArray.display()
+    }
+  }
     
 
   if(ball.isTouching(edges[3])){
@@ -254,6 +256,3 @@ function keyPressed() {
   }
 }
 
-function deleteBrick(ball, brick){
-  brick.remove();
-}
