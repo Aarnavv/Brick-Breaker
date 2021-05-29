@@ -1,214 +1,169 @@
-const Engine = Matter.Engine;
-const World = Matter.World;
-const Bodies = Matter.Bodies;
-const Constraint = Matter.Constraint;
-const Render = Matter.Render;
 
+var xCor = 90;
+var yCor = 100;
+var timesToRun = 23;
 
+var bricksGroup;
 
-var engine, world;
-var brickRowOneArray = [];
-var brickRowOne = 20;
-
-var brickRowTwoArray = [];
-var brickRowTwo = 18;
-
-var brickRowThreeArray = [];
-var brickRowThree = 16;
-
-var brickRowFourArray = [];
-var brickRowFour = 14;
-
-var brickRowFiveArray = [];
-var brickRowFive = 12;
-
-var brickRowSixArray = [];
-var brickRowSix = 10;
-
-var brickRowSevenArray = [];
-var brickRowSeven = 8;
-
-var brickRowEightArray = [];
-var brickRowEight = 6;
-
-var brickRowNineArray = [];
-var brickRowNine = 4;
-
-var brickRowTenArray = [];
-var brickRowTen = 2;
-
-var brickRowElevenArray = [];
-var brickRowEleven = 0;
+var brickImage1;
+var brickImage2;
+var brickImage3;
+var brickImage4;
+var brickImage5;
 
 var bgImg;
-var i;
 
-var paddle;
+var paddle, paddleImg;
 var ball, ballImg;
+
+var imgs = [];
+var imageToUse;
+var brickBreakSound, gameOverSound, gameWinSound;
+var score = 0;
+
+var gameState = "pre-play";
 
 function preload() {
   bgImg = loadImage("images/bg2.jpeg")
-  ballImg = loadImage("images/ball.png");
+  ballImg = loadImage("images/ball.png")
+  brickImage1 = loadImage("images/blue.jpeg")
+  brickImage2 = loadImage("images/green.jpeg")
+  brickImage3 = loadImage("images/orange.jpeg")
+  brickImage4 = loadImage("images/red.jpeg")
+  brickImage5 = loadImage("images/yellow.jpeg")
+  paddleImg = loadImage("images/paddle.png")
 
+  brickBreakSound = loadSound("Sounds/brickBreak.mp3")
+  gameOverSound = loadSound("Sounds/gameOver.mp3")
+  gameWinSound = loadSound("Sounds/gameWin.mp3")
 }
 
 function setup() {
-  createCanvas(1400, 800);
-  engine = Engine.create();
-  world = engine.world;
-  var render = Render.create({
-    element: document.body,
-    engine: engine,
-    options: {
-      width: 1400,
-      height: 800,
-      wireframes: false
-    }
-  });
-  Render.run(render);
+  createCanvas(1325, 680);
 
-  var xRowOne = 100;
-  var yRowOne = 200;
-  for(i = 0; i <= brickRowOne; i++){
-    brickRowOneArray.push(new Bricks(xRowOne, yRowOne))
-    xRowOne += 61;
-  }
+  paddle = createSprite(650, 600, 200, 25);
+  paddle.addImage(paddleImg);
+  paddle.setCollider("rectangle", 0, 0, 230, 35);
 
-
-  var xRowTwo = 161;
-  var yRowTwo = 221;
-  for(i = 0; i <= brickRowTwo; i++){
-    brickRowTwoArray.push(new Bricks(xRowTwo, yRowTwo))
-    xRowTwo += 61;
-  }
-
-  var xRowThree = 222;
-  var yRowThree = 242;
-  for(i = 0; i <= brickRowThree; i++){
-    brickRowThreeArray.push(new Bricks(xRowThree, yRowThree))
-    xRowThree += 61;
-  }
-
-  var xRowFour = 283;
-  var yRowFour = 263;
-  for(i = 0; i <= brickRowFour; i++){
-    brickRowFourArray.push(new Bricks(xRowFour, yRowFour))
-    xRowFour += 61;
-  }
-
-  var xRowFive = 343;
-  var yRowFive = 284;
-  for(i = 0; i <= brickRowFive; i++){
-    brickRowFiveArray.push(new Bricks(xRowFive, yRowFive))
-    xRowFive += 61;
-  }
-
-  var xRowSix = 404;
-  var yRowSix = 305;
-  for(i = 0; i <= brickRowSix; i++){
-    brickRowSixArray.push(new Bricks(xRowSix, yRowSix))
-    xRowSix += 61;
-  }
-
-  var xRowSeven = 465;
-  var yRowSeven = 326;
-  for(i = 0; i <= brickRowSeven; i++){
-    brickRowSevenArray.push(new Bricks(xRowSeven, yRowSeven))
-    xRowSeven += 61;
-  }
-
-  var xRowEight = 526;
-  var yRowEight = 347;
-  for(i = 0; i <= brickRowEight; i++){
-    brickRowEightArray.push(new Bricks(xRowEight, yRowEight))
-    xRowEight += 61;
-  }
-
-  var xRowNine = 587;
-  var yRowNine = 368;
-  for(i = 0; i <= brickRowNine; i++){
-    brickRowNineArray.push(new Bricks(xRowNine, yRowNine))
-    xRowNine += 61;
-  }
-
-  var xRowTen = 648;
-  var yRowTen = 389;
-  for(i = 0; i <= brickRowTen; i++){
-    brickRowTenArray.push(new Bricks(xRowTen, yRowTen))
-    xRowTen += 61;
-  }
-
-  var xRowEleven = 709;
-  var yRowEleven = 410;
-  for(i = 0; i <= brickRowEleven; i++){
-    brickRowElevenArray.push(new Bricks(xRowEleven, yRowEleven))
-    xRowEleven += 61;
-  }
-
-  paddle = new Paddle();
-  ball = new Ball();
+  ball = createSprite(650, 550, 20, 20);
+  ball.addImage(ballImg);
+  ball.scale = 0.02;
 }
 
 function draw() {
-  background("blue")
-  
-  Engine.update(engine); 
- 
+  background(bgImg)
 
-  for(i = 0; i <= brickRowOne; i++){
-    brickRowOneArray[i].display();
+  var edges = createEdgeSprites()
+
+  ball.bounceOff(edges[2])
+  ball.bounceOff(edges[0])
+  ball.bounceOff(edges[1])
+  ball.bounceOff(paddle)
+
+  if (gameState == "pre-play") {
+    drawBricks();
+    gameState = "play"
+
+    ball.velocityX = -5;
+    ball.velocityY = -5;
+
+    ball.x = 650;
+    ball.y = 550;
+
+    paddle.x = 650;
+    paddle.y = 600;
+
+    score = 0;
   }
 
-  for(i = 0; i <= brickRowTwo; i++){
-    brickRowTwoArray[i].display();
+  ball.bounceOff(bricksGroup, deleteBrick)
+
+  fill("white")
+  textSize(30)
+  textFont("TimesNewRoman")
+  text("Score: " + score, 100, 60);
+
+  if (gameState == "play") {
+    if (ball.isTouching(edges[3])) {
+      gameOverSound.play();
+      gameState = "over"
+    }
+    if (score == 144) {
+      gameWinSound.play();
+      gameState = "win";
+    }
   }
 
-  for(i = 0; i <= brickRowThree; i++){
-    brickRowThreeArray[i].display();
+  if (gameState == "over") {
+    textSize(55)
+    text("You lost. Game over.", 400, 500)
+
+    ball.velocityX = 0;
+    ball.velocityY = 0;
   }
 
-  for(i = 0; i <= brickRowFour; i++){
-    brickRowFourArray[i].display();
+  if (gameState == "win") {
+    textSize(55)
+    text("You win. Congratulations!", 400, 500)
+
+    ball.velocityX = 0;
+    ball.velocityY = 0;
   }
 
-  for(i = 0; i <= brickRowFive; i++){
-    brickRowFiveArray[i].display();
+  if (gameState == "win" || gameState == "over") {
+    if (keyDown("space")) {
+      bricksGroup.destroyEach();
+      gameState = "pre-play"
+    }
   }
-
-  for(i = 0; i <= brickRowSix; i++){
-    brickRowSixArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowSeven; i++){
-    brickRowSevenArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowEight; i++){
-    brickRowEightArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowNine; i++){
-    brickRowNineArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowTen; i++){
-    brickRowTenArray[i].display();
-  }
-
-  for(i = 0; i <= brickRowEleven; i++){
-    brickRowElevenArray[i].display();
-  }
-
-  paddle.display();
-  paddle.paddle.position.y = 600;
-  ball.display();
-  image(ballImg, ball.body.position.x, ball.body.position.y, 40, 40);
-
 
   drawSprites();
 }
 
-// function keyPressed(){
-//   paddle.move();
-// }
+function keyPressed() {
+  if (gameState == "play") {
+    if (paddle.x >= 5 && paddle.x <= 1300) {
+      if (keyCode == RIGHT_ARROW) {
+        paddle.x += 25;
+      }
+      if (keyCode == LEFT_ARROW) {
+        paddle.x -= 25;
+      }
+    }
+    else if (paddle.x < 5) {
+      paddle.x = 10
+    }
+    else if (paddle.x > 1300) {
+      paddle.x = 1275
+    }
+  }
+}
 
+function deleteBrick(ball, brick) {
+  brick.remove();
+  brickBreakSound.play();
+  score++;
+}
+
+function drawBricks() {
+  imgs = [brickImage1, brickImage2, brickImage3, brickImage4, brickImage5]
+
+  imageToUse = random(imgs);
+
+  bricksGroup = createGroup();
+
+  for (var i = 1; i <= 12; i++) {
+    for (var j = timesToRun; j >= 1; j -= 1) {
+      brick = createSprite(xCor, yCor, 50, 20)
+      imageToUse = random(imgs);
+      brick.addImage(imageToUse)
+      brick.scale = 1;
+      bricksGroup.add(brick);
+      xCor += 51;
+    }
+    xCor = 90
+    xCor += (51 * i)
+    yCor += 25
+    timesToRun = timesToRun - 2;
+  }
+}
